@@ -13,14 +13,8 @@ env:
   DEFAULT_PYTHON: "3.10"
 
 jobs:
-  prebuildwheels:
-    uses: ./.github/workflows/jh-wheels.yml
-    secrets: inherit
-
-
   init:
     name: Initialize build
-    needs: prebuildwheels
     if: github.repository_owner == 'jethub-homeassistant'
     runs-on: ${{ vars.RUNNER }}
     outputs:
