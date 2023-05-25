@@ -67,7 +67,7 @@ jobs:
     name: Build PyPi package
     needs: init
     runs-on: ${{ vars.RUNNER }}
-    if: github.repository_owner == 'jethub-homeassistant' && needs.init.outputs.publish == 'true'
+    if: 0 # github.repository_owner == 'jethub-homeassistant' && needs.init.outputs.publish == 'true'
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3.5.2
