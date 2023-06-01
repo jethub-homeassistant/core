@@ -1,11 +1,11 @@
 image: jethubjhaos/{arch}-homeassistant
 shadow_repository: ghcr.io/jethub-homeassistant
 build_from:
-  aarch64: ghcr.io/jethub-homeassistant/aarch64-homeassistant-base:2023.04.2
-  armhf: ghcr.io/jethub-homeassistant/armhf-homeassistant-base:2023.04.2
-  armv7: ghcr.io/jethub-homeassistant/armv7-homeassistant-base:2023.04.2
-  amd64: ghcr.io/jethub-homeassistant/amd64-homeassistant-base:2023.04.2
-  i386: ghcr.io/jethub-homeassistant/i386-homeassistant-base:2023.04.2
+  aarch64: ghcr.io/jethub-homeassistant/aarch64-homeassistant-base:2023.05.0
+  armhf: ghcr.io/jethub-homeassistant/armhf-homeassistant-base:2023.05.0
+  armv7: ghcr.io/jethub-homeassistant/armv7-homeassistant-base:2023.05.0
+  amd64: ghcr.io/jethub-homeassistant/amd64-homeassistant-base:2023.05.0
+  i386: ghcr.io/jethub-homeassistant/i386-homeassistant-base:2023.05.0
 codenotary:
   signer: vb@jethome.ru
   base_image: vb@jethome.ru
