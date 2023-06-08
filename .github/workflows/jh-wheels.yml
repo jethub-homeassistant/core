@@ -276,6 +276,7 @@ jobs:
             sed -i "s|# pycups|pycups|g" ${requirement_file}
             sed -i "s|# homekit|homekit|g" ${requirement_file}
             sed -i "s|# decora-wifi|decora-wifi|g" ${requirement_file}
+            sed -i "s|# decora_wifi|decora_wifi|g" ${requirement_file}
             sed -i "s|# python-gammu|python-gammu|g" ${requirement_file}
 
             # Some packages are not buildable on armhf anymore
