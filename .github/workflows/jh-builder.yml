@@ -375,36 +375,36 @@ jobs:
             do
               echo "!!!!!!!!!!!!!! begin registry ${registry}"
 
-              docker manifest create "${registry}/jethub-homeassistant:${tag_l}" \
+              docker manifest create "${registry}/home-assistant:${tag_l}" \
                 "${registry}/amd64-homeassistant:${tag_r}" \
                 "${registry}/i386-homeassistant:${tag_r}" \
                 "${registry}/armhf-homeassistant:${tag_r}" \
                 "${registry}/armv7-homeassistant:${tag_r}" \
                 "${registry}/aarch64-homeassistant:${tag_r}"
 
-              docker manifest annotate "${registry}/jethub-homeassistant:${tag_l}" \
+              docker manifest annotate "${registry}/home-assistant:${tag_l}" \
                 "${registry}/amd64-homeassistant:${tag_r}" \
                 --os linux --arch amd64
 
-              docker manifest annotate "${registry}/jethub-homeassistant:${tag_l}" \
+              docker manifest annotate "${registry}/home-assistant:${tag_l}" \
                 "${registry}/i386-homeassistant:${tag_r}" \
                 --os linux --arch 386
 
-              docker manifest annotate "${registry}/jethub-homeassistant:${tag_l}" \
+              docker manifest annotate "${registry}/home-assistant:${tag_l}" \
                 "${registry}/armhf-homeassistant:${tag_r}" \
                 --os linux --arch arm --variant=v6
 
-              docker manifest annotate "${registry}/jethub-homeassistant:${tag_l}" \
+              docker manifest annotate "${registry}/home-assistant:${tag_l}" \
                 "${registry}/armv7-homeassistant:${tag_r}" \
                 --os linux --arch arm --variant=v7
 
-              docker manifest annotate "${registry}/jethub-homeassistant:${tag_l}" \
+              docker manifest annotate "${registry}/home-assistant:${tag_l}" \
                 "${registry}/aarch64-homeassistant:${tag_r}" \
                 --os linux --arch arm64 --variant=v8
 
-              echo "!!!!!!!!!!! docker manifest push --purge ${registry}/jethub-homeassistant:${tag_l}"
+              echo "!!!!!!!!!!! docker manifest push --purge ${registry}/home-assistant:${tag_l}"
               echo "!!!!!!!!!!! cosign sign --yes ${registry}/home-assistant:${tag_l}"
-              docker manifest push --purge "${registry}/jethub-homeassistant:${tag_l}"
+              docker manifest push --purge "${registry}/home-assistant:${tag_l}"
               cosign sign --yes "${registry}/home-assistant:${tag_l}"
     
             done
