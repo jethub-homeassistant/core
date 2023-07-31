@@ -373,6 +373,7 @@ jobs:
 
             for registry in "ghcr.io/jethub-homeassistant" "docker.io/jethubjhaos"
             do
+              echo "!!!!!!!!!!!!!! begin registry ${registry}"
 
               docker manifest create "${registry}/jethub-homeassistant:${tag_l}" \
                 "${registry}/amd64-homeassistant:${tag_r}" \
@@ -401,9 +402,11 @@ jobs:
                 "${registry}/aarch64-homeassistant:${tag_r}" \
                 --os linux --arch arm64 --variant=v8
 
+              echo "!!!!!!!!!!! docker manifest push --purge ${registry}/jethub-homeassistant:${tag_l}"
+              echo "!!!!!!!!!!! cosign sign --yes ${registry}/home-assistant:${tag_l}"
               docker manifest push --purge "${registry}/jethub-homeassistant:${tag_l}"
               cosign sign --yes "${registry}/home-assistant:${tag_l}"
-
+    
             done
           }
 
@@ -424,7 +427,7 @@ jobs:
             cosign sign --yes "docker.io/jethubjhaos/${image}:${tag}"
           }
 
-          # Pull images from github container registry and verify signature
+          echo "# Pull images from github container registry and verify signature"
           docker pull "ghcr.io/jethub-homeassistant/amd64-homeassistant:${{ needs.init.outputs.version }}"
           docker pull "ghcr.io/jethub-homeassistant/i386-homeassistant:${{ needs.init.outputs.version }}"
           docker pull "ghcr.io/jethub-homeassistant/armhf-homeassistant:${{ needs.init.outputs.version }}"
@@ -437,17 +440,17 @@ jobs:
           validate_image "ghcr.io/jethub-homeassistant/armv7-homeassistant:${{ needs.init.outputs.version }}"
           validate_image "ghcr.io/jethub-homeassistant/aarch64-homeassistant:${{ needs.init.outputs.version }}"
 
-          # Upload images to dockerhub
+          echo "# Upload images to dockerhub"
           push_dockerhub "amd64-homeassistant" "${{ needs.init.outputs.version }}"
           push_dockerhub "i386-homeassistant" "${{ needs.init.outputs.version }}"
           push_dockerhub "armhf-homeassistant" "${{ needs.init.outputs.version }}"
           push_dockerhub "armv7-homeassistant" "${{ needs.init.outputs.version }}"
           push_dockerhub "aarch64-homeassistant" "${{ needs.init.outputs.version }}"
 
-          # Create version tag
+          echo "# Create version tag"
           create_manifest "${{ needs.init.outputs.version }}" "${{ needs.init.outputs.version }}"
 
-          # Create general tags
+          echo "# Create general tags"
           if [[ "${{ needs.init.outputs.version }}" =~ d ]]; then
             create_manifest "dev" "${{ needs.init.outputs.version }}"
           elif [[ "${{ needs.init.outputs.version }}" =~ b ]]; then
