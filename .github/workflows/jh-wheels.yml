@@ -27,7 +27,7 @@ jobs:
       architectures: ${{ steps.info.outputs.architectures }}
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v4.0.0
+        uses: actions/checkout@v4.1.0
 
       - name: Get information
         id: info
@@ -38,7 +38,7 @@ jobs:
           if [[ ${{ github.event_name }} =~ (schedule|workflow_dispatch) ]]; then
             touch requirements_diff.txt
           else
-            curl -s -o requirements_diff.txt https://raw.githubusercontent.com/jethub-homeassistant/core/master/requirements.txt
+            curl -s -o requirements_diff.txt https://raw.githubusercontent.com/jethub-homeassistant/core/master-jethub/requirements.txt
           fi
 
       - name: Write env-file
@@ -57,7 +57,7 @@ jobs:
             echo "CI_BUILD=1"
             echo "ENABLE_HEADLESS=1"
 
-            # Use C-Extension for sqlalchemy
+            # Use C-Extension for SQLAlchemy
             echo "REQUIRE_SQLALCHEMY_CEXT=1"
           ) > .env_file
 
@@ -85,7 +85,7 @@ jobs:
         arch: ${{ fromJson(needs.init.outputs.architectures) }}
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v4.0.0
+        uses: actions/checkout@v4.1.0
 
       - name: Download env_file
         uses: actions/download-artifact@v3
@@ -98,7 +98,7 @@ jobs:
           name: requirements_diff
 
       - name: Build wheels
-        uses: jethub-homeassistant/wheels@2023.04.0
+        uses: jethub-homeassistant/wheels@2023.09.1
         with:
           abi: ${{ matrix.abi }}
           tag: musllinux_1_2
@@ -123,7 +123,7 @@ jobs:
         arch: ${{ fromJson(needs.init.outputs.architectures) }}
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v4.0.0
+        uses: actions/checkout@v4.1.0
 
       - name: Download env_file
         uses: actions/download-artifact@v3
@@ -179,7 +179,7 @@ jobs:
           sed -i "/numpy/d" homeassistant/package_constraints.txt
 
       - name: Build wheels (part 1)
-        uses: jethub-homeassistant/wheels@2023.04.0
+        uses: jethub-homeassistant/wheels@2023.09.1
         with:
           abi: ${{ matrix.abi }}
           tag: musllinux_1_2
@@ -187,13 +187,13 @@ jobs:
           wheels-key: ${{ secrets.WHEELS_KEY }}
           env-file: true
           apk: "bluez-dev;libffi-dev;openssl-dev;glib-dev;eudev-dev;libxml2-dev;libxslt-dev;libpng-dev;libjpeg-turbo-dev;tiff-dev;cups-dev;gmp-dev;mpfr-dev;mpc1-dev;ffmpeg-dev;gammu-dev;yaml-dev;openblas-dev;fftw-dev;lapack-dev;gfortran;blas-dev;eigen-dev;freetype-dev;glew-dev;harfbuzz-dev;hdf5-dev;libdc1394-dev;libtbb-dev;mesa-dev;openexr-dev;openjpeg-dev;uchardet-dev"
-          skip-binary: aiohttp;grpcio;sqlalchemy;protobuf
+          skip-binary: aiohttp;grpcio;SQLAlchemy;protobuf
           constraints: "homeassistant/package_constraints.txt"
           requirements-diff: "requirements_diff.txt"
           requirements: "requirements_all.txtaa"
 
       - name: Build wheels (part 2)
-        uses: jethub-homeassistant/wheels@2023.04.0
+        uses: jethub-homeassistant/wheels@2023.09.1
         with:
           abi: ${{ matrix.abi }}
           tag: musllinux_1_2
@@ -201,13 +201,13 @@ jobs:
           wheels-key: ${{ secrets.WHEELS_KEY }}
           env-file: true
           apk: "bluez-dev;libffi-dev;openssl-dev;glib-dev;eudev-dev;libxml2-dev;libxslt-dev;libpng-dev;libjpeg-turbo-dev;tiff-dev;cups-dev;gmp-dev;mpfr-dev;mpc1-dev;ffmpeg-dev;gammu-dev;yaml-dev;openblas-dev;fftw-dev;lapack-dev;gfortran;blas-dev;eigen-dev;freetype-dev;glew-dev;harfbuzz-dev;hdf5-dev;libdc1394-dev;libtbb-dev;mesa-dev;openexr-dev;openjpeg-dev;uchardet-dev"
-          skip-binary: aiohttp;grpcio;sqlalchemy;protobuf
+          skip-binary: aiohttp;grpcio;SQLAlchemy;protobuf
           constraints: "homeassistant/package_constraints.txt"
           requirements-diff: "requirements_diff.txt"
           requirements: "requirements_all.txtab"
 
       - name: Build wheels (part 3)
-        uses: jethub-homeassistant/wheels@2023.04.0
+        uses: jethub-homeassistant/wheels@2023.09.1
         with:
           abi: ${{ matrix.abi }}
           tag: musllinux_1_2
@@ -215,7 +215,7 @@ jobs:
           wheels-key: ${{ secrets.WHEELS_KEY }}
           env-file: true
           apk: "bluez-dev;libffi-dev;openssl-dev;glib-dev;eudev-dev;libxml2-dev;libxslt-dev;libpng-dev;libjpeg-turbo-dev;tiff-dev;cups-dev;gmp-dev;mpfr-dev;mpc1-dev;ffmpeg-dev;gammu-dev;yaml-dev;openblas-dev;fftw-dev;lapack-dev;gfortran;blas-dev;eigen-dev;freetype-dev;glew-dev;harfbuzz-dev;hdf5-dev;libdc1394-dev;libtbb-dev;mesa-dev;openexr-dev;openjpeg-dev;uchardet-dev"
-          skip-binary: aiohttp;grpcio;sqlalchemy;protobuf
+          skip-binary: aiohttp;grpcio;SQLAlchemy;protobuf
           constraints: "homeassistant/package_constraints.txt"
           requirements-diff: "requirements_diff.txt"
           requirements: "requirements_all.txtac"
