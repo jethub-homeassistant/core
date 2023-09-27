@@ -24,7 +24,7 @@ jobs:
       publish: ${{ steps.version.outputs.publish }}
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.1.0
         with:
           fetch-depth: 0
 
@@ -58,7 +58,7 @@ jobs:
     if: 0 # github.repository_owner == 'jethub-homeassistant' && needs.init.outputs.publish == 'true'
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.1.0
 
       - name: update build.yaml
         run: cp -f build-jethub.yaml build.yaml
@@ -107,7 +107,7 @@ jobs:
         arch: ${{ fromJson(needs.init.outputs.architectures) }}
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v4.0.0
+        uses: actions/checkout@v4.1.0
 
       - name: update build.yaml
         run: cp -f build-jethub.yaml build.yaml
@@ -213,14 +213,14 @@ jobs:
           echo "${{ github.sha }};${{ github.ref }};${{ github.event_name }};${{ github.actor }}" > rootfs/OFFICIAL_IMAGE
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2.2.0
+        uses: docker/login-action@v3.0.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build base image
-        uses: jethub-homeassistant/builder@2023.08.0
+        uses: jethub-homeassistant/builder@2023.09.0
         with:
           args: |
             $BUILD_ARGS \
@@ -228,8 +228,6 @@ jobs:
             --cosign \
             --target /data \
             --generic ${{ needs.init.outputs.version }}
-        env:
-          CAS_API_KEY: ${{ secrets.CAS_TOKEN }}
 
       - name: Archive translations
         shell: bash
@@ -265,7 +263,7 @@ jobs:
           - qemuarm-64
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v4.0.0
+        uses: actions/checkout@v4.1.0
 
       - name: update build.yaml
         run: cp -f build-jethub.yaml build.yaml
@@ -282,31 +280,29 @@ jobs:
           fi
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2.2.0
+        uses: docker/login-action@v3.0.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build base image
-        uses: jethub-homeassistant/builder@2023.08.0
+        uses: jethub-homeassistant/builder@2023.09.0
         with:
           args: |
             $BUILD_ARGS \
             --target /data/machine \
             --cosign \
             --machine "${{ needs.init.outputs.version }}=${{ matrix.machine }}"
-        env:
-          CAS_API_KEY: ${{ secrets.CAS_TOKEN }}
 
   publish_ha:
     name: Publish version files
     if: github.repository_owner == 'jethub-homeassistant'
     needs: ["init", "build_machine"]
-    runs-on: ${{ vars.RUNNER }}
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v4.0.0
+        uses: actions/checkout@v4.1.0
 
       - name: update build.yaml
         run: cp -f build-jethub.yaml build.yaml
@@ -346,10 +342,10 @@ jobs:
       id-token: write
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v4.0.0
+        uses: actions/checkout@v4.1.0
 
       - name: Install Cosign
-        uses: sigstore/cosign-installer@v3.1.1
+        uses: sigstore/cosign-installer@v3.1.2
         with:
           cosign-release: "v2.0.2"
 
@@ -357,13 +353,13 @@ jobs:
         run: cp -f build-jethub.yaml build.yaml
 
       - name: Login to DockerHub
-        uses: docker/login-action@v2.2.0
+        uses: docker/login-action@v3.0.0
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2.2.0
+        uses: docker/login-action@v3.0.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
