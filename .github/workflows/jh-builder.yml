@@ -16,7 +16,7 @@ jobs:
   init:
     name: Initialize build
     if: github.repository_owner == 'jethub-homeassistant'
-    runs-on: ${{ vars.RUNNER }}
+    runs-on: ubuntu-latest
     outputs:
       architectures: ${{ steps.info.outputs.architectures }}
       version: ${{ steps.version.outputs.version }}
