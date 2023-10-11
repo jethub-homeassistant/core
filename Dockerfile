@@ -16,7 +16,7 @@ RUN \
     pip3 install \
         --no-cache-dir \
         --only-binary=:all: \
-        --index-url "https://wheels.home-assistant.io/musllinux-index/" \
+        --index-url "https://wheels.iot.jethome.ru/musllinux-index/" \
         -r homeassistant/requirements.txt
 
 COPY requirements_all.txt home_assistant_frontend-* home_assistant_intents-* homeassistant/
@@ -39,7 +39,7 @@ RUN \
         pip3 install \
             --no-cache-dir \
             --only-binary=:all: \
-            --index-url "https://wheels.home-assistant.io/musllinux-index/" \
+            --index-url "https://wheels.iot.jethome.ru/musllinux-index/" \
             -r homeassistant/requirements_all.txt
 
 ## Setup Home Assistant Core
@@ -48,7 +48,7 @@ RUN \
     pip3 install \
         --no-cache-dir \
         --only-binary=:all: \
-        --index-url "https://wheels.home-assistant.io/musllinux-index/" \
+        --index-url "https://wheels.iot.jethome.ru/musllinux-index/" \
         -e ./homeassistant \
     && python3 -m compileall \
         homeassistant/homeassistant
