@@ -1,0 +1,10 @@
+[main]
+host = https://app.transifex.com
+
+[o:jethome:p:jethome-ha:r:jethome-ha-translate]
+file_filter   = build/translations-download/<lang>.json
+source_file   = build/translations-download/en.json
+type          = KEYVALUEJSON
+#STRUCTURED_JSON
+minimum_perc  = 0
+resource_name = JetHome HA translation
