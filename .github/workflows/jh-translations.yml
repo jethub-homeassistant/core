@@ -1,0 +1,58 @@
+name: JH Translations
+
+# yamllint disable-line rule:truthy
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - dev
+      - dev-jethub
+      - master
+      - master-jethub
+    paths:
+      - "**strings.json"
+
+env:
+  DEFAULT_PYTHON: "3.12"
+
+jobs:
+  upload:
+    name: Upload
+    if: github.repository_owner == 'jethub-homeassistant'
+    runs-on: ${{ vars.RUNNER }}
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4.1.7
+
+      - name: Set up Python ${{ env.DEFAULT_PYTHON }}
+        uses: actions/setup-python@v5.1.0
+        with:
+          python-version: ${{ env.DEFAULT_PYTHON }}
+
+      - name: Prepare Translations
+        run: |
+          python3 -m script.jhtranslations upload
+
+      - name: Get translated resources from current HA core dev
+        run: |
+          VERSION=$(curl -s https://version.home-assistant.io/dev.json | jq -r '.homeassistant."qemuarm-64"')
+          docker create --name temp-core ghcr.io/home-assistant/aarch64-homeassistant:$VERSION
+          docker cp temp-core:"/usr/src/homeassistant/build/translations-download/" build/translations-download/
+          docker rm temp-core
+
+          - name: Download Translations from upstream
+          run: |
+            VERSION=$(curl -s https://version.home-assistant.io/beta.json | jq -r '.homeassistant."qemuarm-64"')
+            docker create --name temp-core ghcr.io/home-assistant/aarch64-homeassistant:$VERSION
+            docker cp temp-core:"/usr/src/homeassistant/homeassistant" ./
+            docker rm temp-core
+
+      - name: Archive translations
+        shell: bash
+        run: find ./homeassistant/components/*/translations -name "*.json" | tar zcvf translations.tar.gz -T -
+
+      - name: Upload Translations
+        uses: transifex/cli-action@v2
+        with:
+          token: ${{ secrets.TX_TOKEN }}
+          args: push -s -t -a
