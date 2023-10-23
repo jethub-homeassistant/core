@@ -198,11 +198,35 @@ jobs:
           sed -i "s|pyezviz|# pyezviz|g" requirements_all.txt
           sed -i "s|pykrakenapi|# pykrakenapi|g" requirements_all.txt
 
+
+      - name: create dir for translations
+        run: |
+          mkdir -p build/translations-download
+
+      - name: Restore cache translation files
+        id: cache-translations
+        uses: actions/cache/restore@v3
+        with:
+          path: build/translations-download/
+          key: core-${{ github.sha }}-translations
+
+      - name: Check cache restore result
+        run: |
+          echo ${{ steps.cache-translations.outputs.cache-hit }}
+
       - name: Download Translations
+        if: ${{ steps.cache-translations.outputs.cache-hit }} == 'false'
         uses: transifex/cli-action@v2
         with:
           token: ${{ secrets.TX_TOKEN }}
           args: pull -s -t -a
+
+      - name: Save translation files into cache
+        if: ${{ steps.cache-translations.outputs.cache-hit }} == 'false'
+        uses: actions/cache/save@v3
+        with:
+          path: build/translations-download/
+          key: core-${{ github.sha }}-translations
 
       - name: Write Translations
         run: python3 -m script.jhtranslations download
