@@ -337,6 +337,7 @@ jobs:
           - jethub-h2
           - jethub-d1
           - jethub-d1p
+          - jethub-d2
           - odroid-c4
           - qemuarm
           - qemuarm-64
