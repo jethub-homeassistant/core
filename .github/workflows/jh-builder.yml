@@ -27,7 +27,7 @@ jobs:
       publish: ${{ steps.version.outputs.publish }}
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v4.1.2
+        uses: actions/checkout@v4.1.3
         with:
           fetch-depth: 0
 
@@ -74,7 +74,7 @@ jobs:
         run: find ./homeassistant/components/*/translations -name "*.json" | tar zcvf translations.tar.gz -T -
 
       - name: Upload translations
-        uses: actions/upload-artifact@v4.3.1
+        uses: actions/upload-artifact@v4.3.3
         with:
           name: translations
           path: translations.tar.gz
@@ -96,7 +96,7 @@ jobs:
         arch: ${{ fromJson(needs.init.outputs.architectures) }}
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v4.1.2
+        uses: actions/checkout@v4.1.3
 
       - name: update build.yaml
         run: cp -f build-jethub.yaml build.yaml
@@ -189,18 +189,9 @@ jobs:
           sed -i "s|noaa-coops|# noaa-coops|g" requirements_all.txt
           sed -i "s|pyezviz|# pyezviz|g" requirements_all.txt
           sed -i "s|pykrakenapi|# pykrakenapi|g" requirements_all.txt
-
-      - name: Adjustments for 64-bit
-        if: matrix.arch == 'amd64' || matrix.arch == 'aarch64'
-        run: |
-          # Some speedups are only available on 64-bit, and since
-          # we build 32bit images on 64bit hosts, we only enable
-          # the speed ups on 64bit since the wheels for 32bit
-          # are not available.
-          sed -i "s|aiohttp-zlib-ng|aiohttp-zlib-ng\[isal\]|g" requirements_all.txt
   
       - name: Download translations
-        uses: actions/download-artifact@v4.1.4
+        uses: actions/download-artifact@v4.1.6
         with:
           name: translations
 
@@ -255,7 +246,7 @@ jobs:
           - qemuarm-64
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v4.1.2
+        uses: actions/checkout@v4.1.3
 
       - name: update build.yaml
         run: cp -f build-jethub.yaml build.yaml
@@ -294,7 +285,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v4.1.2
+        uses: actions/checkout@v4.1.3
 
       - name: update build.yaml
         run: cp -f build-jethub.yaml build.yaml
@@ -337,7 +328,7 @@ jobs:
         registry: ["ghcr.io/jethub-homeassistant", "docker.io/jethubjhaos"]
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v4.1.2
+        uses: actions/checkout@v4.1.3
 
       - name: Install Cosign
         uses: sigstore/cosign-installer@v3.4.0
