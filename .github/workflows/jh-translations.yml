@@ -13,7 +13,7 @@ on:
       - "**strings.json"
 
 env:
-  DEFAULT_PYTHON: "3.12.3"
+  DEFAULT_PYTHON: "3.12"
 
 jobs:
   upload:
@@ -22,10 +22,12 @@ jobs:
     runs-on: ${{ vars.RUNNER }}
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v4.1.6
+        uses: actions/checkout@v4.1.7
+        with:
+          fetch-depth: 0
 
       - name: Set up Python ${{ env.DEFAULT_PYTHON }}
-        uses: actions/setup-python@v5.1.0
+        uses: actions/setup-python@v5.2.0
         with:
           python-version: ${{ env.DEFAULT_PYTHON }}
 
@@ -46,11 +48,11 @@ jobs:
             docker create --name temp-core ghcr.io/home-assistant/aarch64-homeassistant:$VERSION
             docker cp temp-core:"/usr/src/homeassistant/homeassistant" ./
             docker rm temp-core
-  
+
       - name: Archive translations
         shell: bash
         run: find ./homeassistant/components/*/translations -name "*.json" | tar zcvf translations.tar.gz -T -
-  
+
       - name: Upload Translations
         uses: transifex/cli-action@v2
         with:
