@@ -19,7 +19,7 @@ on:
   workflow_call:
 
 env:
-  DEFAULT_PYTHON: "3.12.3"
+  DEFAULT_PYTHON: "3.12"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref_name}}
@@ -34,11 +34,11 @@ jobs:
       architectures: ${{ steps.info.outputs.architectures }}
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v4.1.6
+        uses: actions/checkout@v4.1.7
 
       - name: Set up Python ${{ env.DEFAULT_PYTHON }}
         id: python
-        uses: actions/setup-python@v5.1.0
+        uses: actions/setup-python@v5.1.1
         with:
           python-version: ${{ env.DEFAULT_PYTHON }}
           check-latest: true
@@ -84,14 +84,14 @@ jobs:
           ) > .env_file
 
       - name: Upload env_file
-        uses: actions/upload-artifact@v4.3.3
+        uses: actions/upload-artifact@v4.3.4
         with:
           name: env_file
           path: ./.env_file
           overwrite: true
 
       - name: Upload requirements_diff
-        uses: actions/upload-artifact@v4.3.3
+        uses: actions/upload-artifact@v4.3.4
         with:
           name: requirements_diff
           path: ./requirements_diff.txt
@@ -103,7 +103,7 @@ jobs:
           python -m script.gen_requirements_all ci
 
       - name: Upload requirements_all_wheels
-        uses: actions/upload-artifact@v4.3.3
+        uses: actions/upload-artifact@v4.3.4
         with:
           name: requirements_all_wheels
           path: ./requirements_all_wheels_*.txt
@@ -120,20 +120,20 @@ jobs:
         arch: ${{ fromJson(needs.init.outputs.architectures) }}
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v4.1.6
+        uses: actions/checkout@v4.1.7
 
       - name: Download env_file
-        uses: actions/download-artifact@v4.1.7
+        uses: actions/download-artifact@v4.1.8
         with:
           name: env_file
 
       - name: Download requirements_diff
-        uses: actions/download-artifact@v4.1.7
+        uses: actions/download-artifact@v4.1.8
         with:
           name: requirements_diff
 
       - name: Build wheels
-        uses: jethub-homeassistant/wheels@2024.01.0
+        uses: jethub-homeassistant/wheels@2024.07.1
         with:
           abi: ${{ matrix.abi }}
           tag: musllinux_1_2
@@ -158,20 +158,20 @@ jobs:
         arch: ${{ fromJson(needs.init.outputs.architectures) }}
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v4.1.6
+        uses: actions/checkout@v4.1.7
 
       - name: Download env_file
-        uses: actions/download-artifact@v4.1.7
+        uses: actions/download-artifact@v4.1.8
         with:
           name: env_file
 
       - name: Download requirements_diff
-        uses: actions/download-artifact@v4.1.7
+        uses: actions/download-artifact@v4.1.8
         with:
           name: requirements_diff
 
       - name: Download requirements_all_wheels
-        uses: actions/download-artifact@v4.1.7
+        uses: actions/download-artifact@v4.1.8
         with:
           name: requirements_all_wheels
 
@@ -205,7 +205,7 @@ jobs:
           sed -i "/numpy/d" homeassistant/package_constraints.txt
 
       - name: Build wheels (old cython)
-        uses: jethub-homeassistant/wheels@2024.01.0
+        uses: jethub-homeassistant/wheels@2024.07.1
         with:
           abi: ${{ matrix.abi }}
           tag: musllinux_1_2
@@ -220,7 +220,7 @@ jobs:
           pip: "'cython<3'"
 
       - name: Build wheels (part 1)
-        uses: jethub-homeassistant/wheels@2024.01.0
+        uses: jethub-homeassistant/wheels@2024.07.1
         with:
           abi: ${{ matrix.abi }}
           tag: musllinux_1_2
@@ -234,7 +234,7 @@ jobs:
           requirements: "requirements_all.txtaa"
 
       - name: Build wheels (part 2)
-        uses: jethub-homeassistant/wheels@2024.01.0
+        uses: jethub-homeassistant/wheels@2024.07.1
         with:
           abi: ${{ matrix.abi }}
           tag: musllinux_1_2
@@ -248,7 +248,7 @@ jobs:
           requirements: "requirements_all.txtab"
 
       - name: Build wheels (part 3)
-        uses: jethub-homeassistant/wheels@2024.01.0
+        uses: jethub-homeassistant/wheels@2024.07.1
         with:
           abi: ${{ matrix.abi }}
           tag: musllinux_1_2
