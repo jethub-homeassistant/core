@@ -74,7 +74,7 @@ jobs:
         run: find ./homeassistant/components/*/translations -name "*.json" | tar zcvf translations.tar.gz -T -
 
       - name: Upload translations
-        uses: actions/upload-artifact@v4.4.3
+        uses: actions/upload-artifact@v4.5.0
         with:
           name: translations
           path: translations.tar.gz
@@ -103,7 +103,7 @@ jobs:
 
       - name: Download nightly wheels of frontend
         if: needs.init.outputs.channel == 'dev'
-        uses: dawidd6/action-download-artifact@v6
+        uses: dawidd6/action-download-artifact@v7
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
           repo: home-assistant/frontend
@@ -114,7 +114,7 @@ jobs:
 
       - name: Download nightly wheels of intents
         if: needs.init.outputs.channel == 'dev'
-        uses: dawidd6/action-download-artifact@v6
+        uses: dawidd6/action-download-artifact@v7
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
           repo: home-assistant/intents-package
@@ -132,7 +132,7 @@ jobs:
       - name: Set up yq
         run: |
           BINARY=yq_linux_amd64
-          VERSION=v4.44.2
+          VERSION=v4.44.6
           wget https://github.com/mikefarah/yq/releases/download/${VERSION}/${BINARY}.tar.gz -O - |\
             tar xz && sudo mv ${BINARY} /usr/bin/yq && sudo chmod +x /usr/bin/yq
 
