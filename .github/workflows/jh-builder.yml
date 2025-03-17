@@ -35,7 +35,7 @@ jobs:
         run: cp -f build-jethub.yaml build.yaml
 
       - name: Set up Python ${{ env.DEFAULT_PYTHON }}
-        uses: actions/setup-python@v5.4.0
+        uses: actions/setup-python@v5.5.0
         with:
           python-version: ${{ env.DEFAULT_PYTHON }}
 
@@ -74,7 +74,7 @@ jobs:
         run: find ./homeassistant/components/*/translations -name "*.json" | tar zcvf translations.tar.gz -T -
 
       - name: Upload translations
-        uses: actions/upload-artifact@v4.6.1
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: translations
           path: translations.tar.gz
@@ -125,7 +125,7 @@ jobs:
 
       - name: Set up Python ${{ env.DEFAULT_PYTHON }}
         if: needs.init.outputs.channel == 'dev'
-        uses: actions/setup-python@v5.4.0
+        uses: actions/setup-python@v5.5.0
         with:
           python-version: ${{ env.DEFAULT_PYTHON }}
 
@@ -191,7 +191,7 @@ jobs:
           sed -i "s|pykrakenapi|# pykrakenapi|g" requirements_all.txt
 
       - name: Download translations
-        uses: actions/download-artifact@v4.1.9
+        uses: actions/download-artifact@v4.2.1
         with:
           name: translations
 
@@ -206,14 +206,14 @@ jobs:
           echo "${{ github.sha }};${{ github.ref }};${{ github.event_name }};${{ github.actor }}" > rootfs/OFFICIAL_IMAGE
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3.3.0
+        uses: docker/login-action@v3.4.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build base image
-        uses: jethub-homeassistant/builder@2025.02.0
+        uses: jethub-homeassistant/builder@2025.03.0
         with:
           args: |
             $BUILD_ARGS \
@@ -278,14 +278,14 @@ jobs:
           fi
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3.3.0
+        uses: docker/login-action@v3.4.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build base image
-        uses: jethub-homeassistant/builder@2025.02.0
+        uses: jethub-homeassistant/builder@2025.03.0
         with:
           args: |
             $BUILD_ARGS \
@@ -355,7 +355,7 @@ jobs:
 
       - name: Login to DockerHub
         if: matrix.registry == 'cr.jethome.work/ha'
-        uses: docker/login-action@v3.3.0
+        uses: docker/login-action@v3.4.0
         with:
           registry: cr.jethome.work
           username: ${{ secrets.CR_USERNAME }}
@@ -363,7 +363,7 @@ jobs:
 
       - name: Login to GitHub Container Registry
         if: matrix.registry == 'ghcr.io/jethub-homeassistant'
-        uses: docker/login-action@v3.3.0
+        uses: docker/login-action@v3.4.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
