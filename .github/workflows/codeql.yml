@@ -12,7 +12,7 @@ concurrency:
 jobs:
   analyze:
     name: Analyze
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.RUNNER }}
     timeout-minutes: 360
     permissions:
       actions: read
