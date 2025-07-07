@@ -29,7 +29,7 @@ jobs:
   init:
     name: Initialize wheels builder
     if: github.repository_owner == 'jethub-homeassistant'
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.RUNNER }}
     outputs:
       architectures: ${{ steps.info.outputs.architectures }}
     steps:
@@ -129,7 +129,7 @@ jobs:
     name: Build Core wheels ${{ matrix.abi }} for ${{ matrix.arch }} (musllinux_1_2)
     if: github.repository_owner == 'jethub-homeassistant'
     needs: init
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.RUNNER }}
     strategy:
       fail-fast: false
       matrix:
