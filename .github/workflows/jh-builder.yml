@@ -19,7 +19,7 @@ jobs:
   init:
     name: Initialize build
     if: github.repository_owner == 'jethub-homeassistant'
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.RUNNER }}
     outputs:
       architectures: ${{ steps.info.outputs.architectures }}
       version: ${{ steps.version.outputs.version }}
@@ -297,7 +297,7 @@ jobs:
     name: Publish version files
     if: github.repository_owner == 'jethub-homeassistant'
     needs: ["init", "build_machine"]
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.RUNNER }}
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v4.2.2
@@ -333,7 +333,7 @@ jobs:
     name: Publish meta container for ${{ matrix.registry }}
     if: github.repository_owner == 'jethub-homeassistant'
     needs: ["init", "build_base"]
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.RUNNER }}
     permissions:
       contents: read
       packages: write
